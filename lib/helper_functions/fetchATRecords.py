@@ -12,7 +12,7 @@ AIRTABLE_TABLE_NAME = 'Blog Posts'
 AIRTABLE_VIEW_NAME = 'Published Blog Post'
 
 # Initialize Airtable client
-airtable = Airtable(AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME, api_key=AIRTABLE_API_KEY)
+airtable = Airtable(AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME, AIRTABLE_API_KEY)
 
 def fetch_and_process_records():
     # Fetch all records from a specific view in Airtable

@@ -30,7 +30,10 @@ def send_semrush_request(blog_post_record_id, url):
         # Check if lines array has enough elements
         if len(lines) < 2:
             print("Error: Unexpected response format from SEMrush API")
-            return
+            organic_keywords = 0
+            organic_traffic = 0
+            organic_cost = 0
+
 
         # Parse header and data separately
         header = lines[0].split(';')
@@ -40,15 +43,17 @@ def send_semrush_request(blog_post_record_id, url):
         result = {header[i]: data[i] for i in range(min(len(header), len(data)))}
 
         # Extract SEMrush data points
-        organic_keywords = result.get('Organic Keywords', '')  # Default to empty string if key not found
-        organic_traffic = result.get('Organic Traffic', '')
-        organic_cost = result.get('Organic Cost', '')
+        organic_keywords = result.get('Organic Keywords', '0')  # Default to empty string if key not found
+        organic_traffic = result.get('Organic Traffic', '0')
+        organic_cost = result.get('Organic Cost', '0')
 
         # Send data to Airtable
         send_to_airtable(blog_post_record_id, organic_keywords, organic_traffic, organic_cost)
 
     except requests.exceptions.RequestException as e:
         print(f"Error fetching SEMrush data: {e}")
+        send_to_airtable(blog_post_record_id, organic_keywords=0, organic_traffic=0, organic_cost=0)
 
     except Exception as e:
         print(f"Error: {e}")
+        send_to_airtable(blog_post_record_id, organic_keywords=0, organic_traffic=0, organic_cost=0)
