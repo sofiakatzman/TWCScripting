@@ -1,2 +1,3 @@
 airtable-python-wrapper
-semrush-api
+requests
+python-dotenv

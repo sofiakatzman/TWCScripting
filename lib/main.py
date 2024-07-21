@@ -6,9 +6,10 @@ sys.path.append('./helper_functions')
 semrushAnalytics = importlib.import_module('semrushAnalytics')
 fetchATRecords = importlib.import_module('fetchATRecords')
 
-def main():
+def run_script():
     fetchATRecords()
 
+
 if __name__ == "__main__":
-    main()
+    run_script()
 
