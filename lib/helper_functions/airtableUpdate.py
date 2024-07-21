@@ -1,15 +1,25 @@
 import os
 from dotenv import load_dotenv
 import requests
-from airtable import Airtable
 
 # Airtable configuration
 AIRTABLE_TABLE_NAME = 'SEMRush Data'
 load_dotenv()
 AIRTABLE_BASE_ID = os.getenv('AIRTABLE_BASE_ID')
-AIRTABLE_API_KEY= os.getenv('AIRTABLE_API_KEY')
+AIRTABLE_API_KEY = os.getenv('AIRTABLE_API_KEY')
 
-def send_to_airtable(blog_post_record_id, organic_keywords, organic_traffic, organic_cost):
+def send_to_airtable(blog_post_record_id, organic_keywords, organic_traffic, organic_cost, prev_organic_keywords, prev_organic_traffic):
+    # Ensure all values are integers
+    organic_keywords = int(organic_keywords)
+    organic_traffic = int(organic_traffic)
+    organic_cost = int(organic_cost)
+    prev_organic_keywords = int(prev_organic_keywords)
+    prev_organic_traffic = int(prev_organic_traffic)
+
+    # Calculate differences
+    organic_keywords_diff = organic_keywords - prev_organic_keywords
+    organic_traffic_diff = organic_traffic - prev_organic_traffic
+    
     url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_NAME}"
     headers = {
         "Authorization": f"Bearer {AIRTABLE_API_KEY}",
@@ -18,9 +28,11 @@ def send_to_airtable(blog_post_record_id, organic_keywords, organic_traffic, org
     data = {
         "fields": {
             "Blog Post": [blog_post_record_id],  
-            "Organic Keywords": int(organic_keywords),
-            "Organic Traffic": int(organic_traffic),
-            "Organic Cost": int(organic_cost),
+            "Organic Keywords": organic_keywords,
+            "Organic Traffic": organic_traffic,
+            "Organic Cost": organic_cost,
+            "Organic Keywords Change": organic_keywords_diff,
+            "Organic Traffic Change": organic_traffic_diff,
         }
     }
     
